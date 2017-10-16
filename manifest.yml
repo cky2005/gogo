@@ -4,6 +4,6 @@ applications:
   buildpack: go_buildpack
   name: fetchserver
   path: .
-  domain: mybluemix.net
+  domain: eu-gb.mybluemix.net
   instances: 1
   memory: 128M
