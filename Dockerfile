@@ -1,12 +1,24 @@
-# see https://hub.docker.com/r/phuslu/goproxy-php/
-FROM golang:alpine
-RUN apk update && \
-    apk add curl && \
-    curl -L "https://github.com/cky2005/goproxy/archive/server.php-go.tar.gz" | gzip -d | tar xv && \
-    cd goproxy-server.php-go && \
-    env CGO_ENABLED=0 \
-    go build -v -ldflags="-s -w" -o /goproxy-php
+FROM alpine:3.6
 
-FROM alpine
-COPY --from=0 /goproxy-php /goproxy-php
-ENTRYPOINT /goproxy-php
+ENV VER=2.45
+
+RUN apk add --no-cache --virtual .build-deps ca-certificates curl \
+ && mkdir -m 777 /v2raybin \ 
+ && cd /v2raybin \
+ && curl -L -H "Cache-Control: no-cache" -o v2ray.zip https://github.com/v2ray/v2ray-core/releases/download/v$VER/v2ray-linux-64.zip \
+ && unzip v2ray.zip \
+ && mv /v2raybin/v2ray-v$VER-linux-64/v2ray /v2raybin/ \
+ && chmod +x /v2raybin/v2ray \
+ && rm -rf v2ray.zip \
+ && rm -rf v2ray-v$VER-linux-64 \
+ && chgrp -R 0 /v2raybin \
+ && chmod -R g+rwX /v2raybin 
+ 
+ADD entrypoint.sh /entrypoint.sh
+ADD config.json /config.json
+
+RUN chmod +x /entrypoint.sh 
+
+ENTRYPOINT  /entrypoint.sh 
+
+EXPOSE 8080
