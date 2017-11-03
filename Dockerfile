@@ -1,6 +1,8 @@
 FROM alpine:3.6
 
-ENV VER=2.45 PORT=8080 ID=23ad6b10-8d1a-40f7-8ad0-e3e35cd38297
+ENV VER=2.45 \
+    PORT=8080 \
+    ID=23ad6b10-8d1a-40f7-8ad0-e3e35cd38297
 
 RUN apk add --no-cache --virtual .build-deps ca-certificates curl \
  && mkdir -m 777 /v2raybin \ 
@@ -18,7 +20,12 @@ RUN apk add --no-cache --virtual .build-deps ca-certificates curl \
  && rm -rf v2ray.zip \
  && rm -rf v2ray-v$VER-linux-64 \
  && chgrp -R 0 /v2raybin \
- && chmod -R g+rwX /v2raybin \
- && ./v2ray
+ && chmod -R g+rwX /v2raybin
  
+COPY ./entrypoint.sh /
+
+RUN chmod +x /entrypoint.sh 
+
+ENTRYPOINT ["/entrypoint.sh"]
+
 EXPOSE $PORT
