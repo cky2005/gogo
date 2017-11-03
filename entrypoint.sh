@@ -1,4 +1,4 @@
 #!/bin/bash
 
-cd /v2raybin
+cd /
 ./v2ray
