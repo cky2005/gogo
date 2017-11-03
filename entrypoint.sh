@@ -1,4 +1,1 @@
-#!/bin/bash
-
-cd /
-./v2ray
+[[ -f $HOME/v2raybin/v2ray ]] && cd $HOME/v2raybin && ./v2ray || echo "$HOME/v2raybin/v2ray not found"
