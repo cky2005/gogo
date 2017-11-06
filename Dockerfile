@@ -12,15 +12,13 @@ RUN apk add --no-cache --virtual .build-deps ca-certificates curl \
  && sed -i "s/\/var\/log\/v2ray\/access.log//" /v2raybin/config.json \
  && sed -i "s/\/var\/log\/v2ray\/error.log//" /v2raybin/config.json \
  && sed -i "s/warning//" /v2raybin/config.json \
- && sed -i "s/10086/$PORT/g" /v2raybin/config.json \
+ && sed -i "s/10086/$PORTA/g" /v2raybin/config.json \
  && sed -i "s/23ad6b10-8d1a-40f7-8ad0-e3e35cd38297/$ID/g" /v2raybin/config.json \
  && chmod +x /v2raybin/v2ray \
  && rm -rf v2ray.zip \
  && rm -rf v2ray-v$VER-linux-64 \
  && chgrp -R 0 /v2raybin \
- && chmod -R g+rwX /v2raybin \
- && pwd \
- && echo "$HOME"
+ && chmod -R g+rwX /v2raybin
 
 COPY ./entrypoint.sh /
 
@@ -28,4 +26,4 @@ RUN chmod +x /entrypoint.sh
 
 ENTRYPOINT /entrypoint.sh
 
-EXPOSE $PORT
+EXPOSE 8080
